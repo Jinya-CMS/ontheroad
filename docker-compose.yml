@@ -1,0 +1,19 @@
+version: "3"
+services:
+  ontheroad_db:
+    container_name: ontheroad_db
+    image: postgres:12.0-alpine
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: ontheroad
+      POSTGRES_PASSWORD: ontheroad
+    restart: always
+
+  ontheroad_mailhog:
+    container_name: ontheroad_mailhog
+    image: mailhog/mailhog
+    ports:
+      - 1025:1025
+      - 8025:8025
+    restart: always
