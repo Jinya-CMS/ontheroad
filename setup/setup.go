@@ -25,7 +25,7 @@ func Welcome(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		return
 	}
 
-	httpUtils.Render("templates/setup/index.html.tmpl", nil, w)
+	httpUtils.RenderSingle("templates/setup/index.html.tmpl", nil, w)
 }
 
 func DatabaseView(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -40,19 +40,19 @@ func DatabaseView(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	}
 
 	connectionString := os.Getenv("connectionString")
-	httpUtils.Render("templates/setup/database.html.tmpl", connectionString, w)
+	httpUtils.RenderSingle("templates/setup/database.html.tmpl", connectionString, w)
 }
 
 func DatabaseAction(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	err := database.CreateDatabase()
 	if err != nil {
-		httpUtils.Render("templates/setup/databaseError.html.tmpl", err, w)
+		httpUtils.RenderSingle("templates/setup/databaseError.html.tmpl", err, w)
 		return
 	}
 
 	file, err := os.Create("databaseSetup.lock")
 	if err != nil {
-		httpUtils.Render("templates/setup/databaseError.html.tmpl", err, w)
+		httpUtils.RenderSingle("templates/setup/databaseError.html.tmpl", err, w)
 		return
 	}
 
@@ -71,7 +71,7 @@ func CreateAdminView(w http.ResponseWriter, r *http.Request, _ httprouter.Params
 		return
 	}
 
-	httpUtils.Render("templates/setup/admin.html.tmpl", nil, w)
+	httpUtils.RenderSingle("templates/setup/admin.html.tmpl", nil, w)
 }
 
 func CreateAdminAction(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -91,7 +91,7 @@ func CreateAdminAction(w http.ResponseWriter, r *http.Request, _ httprouter.Para
 			Error: validityErrors.Error(),
 		}
 
-		httpUtils.Render("templates/setup/admin.html.tmpl", tmplData, w)
+		httpUtils.RenderSingle("templates/setup/admin.html.tmpl", tmplData, w)
 		return
 	}
 
@@ -101,7 +101,7 @@ func CreateAdminAction(w http.ResponseWriter, r *http.Request, _ httprouter.Para
 			Error: err.Error(),
 		}
 
-		httpUtils.Render("templates/setup/admin.html.tmpl", tmplData, w)
+		httpUtils.RenderSingle("templates/setup/admin.html.tmpl", tmplData, w)
 		return
 	}
 

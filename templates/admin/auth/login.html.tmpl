@@ -1,0 +1,33 @@
+<html lang="en">
+<head>
+    <title>On The Road – Login</title>
+    <link rel="stylesheet" href="/public/admin.css">
+</head>
+<body class="bg-secondary-100">
+<form class="mx-auto container my-auto rounded-lg shadow py-4 px-8 w-1/4 bg-white mt-64 " method="post">
+    <header class="border-primary-200 border-b border-solid pb-8">
+        <h1 class="text-4xl text-gray-700">Login</h1>
+    </header>
+    <section class="text-base text-gray-700 py-8">
+        {{if .HasError}}
+            <p class="mb-4 px-6 bg-red-700 text-red-100 py-4 rounded-lg">{{.Error}}</p>
+        {{end}}
+        <div class="flex flex-wrap mb-4">
+            <label for="email" class="w-full font-bold">Email</label>
+            <input required name="email" id="email" type="email" value="{{.Email}}"
+                   class="py-1 px-2 border border-solid border-primary-500 rounded w-full invalid:border-red-700">
+        </div>
+        <div class="flex flex-wrap mb-4">
+            <label for="password" class="w-full font-bold">Password</label>
+            <input required name="password" id="password" type="password"
+                   class="py-1 px-2 border border-solid border-primary-500 rounded w-full invalid:border-red-700">
+        </div>
+    </section>
+    <footer class="flex border-primary-200 border-t border-solid pt-8 justify-end">
+        <button class="p-2 rounded-lg bg-primary-500 text-white hover:bg-white hover:text-primary-500 border-2 border-solid border-primary-500">
+            Login
+        </button>
+    </footer>
+</form>
+</body>
+</html>
