@@ -35,7 +35,7 @@ func DatabaseView(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	}
 
 	if !checkIfDatabaseSetup() {
-		http.Redirect(w, r, "/setup/admin", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, "/setup/admin", http.StatusSeeOther)
 		return
 	}
 
@@ -57,7 +57,7 @@ func DatabaseAction(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 	}
 
 	_ = file.Close()
-	http.Redirect(w, r, "/setup/admin", http.StatusTemporaryRedirect)
+	http.Redirect(w, r, "/setup/admin", http.StatusSeeOther)
 }
 
 func CreateAdminView(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -67,7 +67,7 @@ func CreateAdminView(w http.ResponseWriter, r *http.Request, _ httprouter.Params
 	}
 
 	if checkIfDatabaseSetup() {
-		http.Redirect(w, r, "/setup/database", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, "/setup/database", http.StatusSeeOther)
 		return
 	}
 
@@ -108,5 +108,5 @@ func CreateAdminAction(w http.ResponseWriter, r *http.Request, _ httprouter.Para
 	file, err := os.Create("setup.lock")
 	_ = file.Close()
 
-	http.Redirect(w, r, "/admin/login", http.StatusTemporaryRedirect)
+	http.Redirect(w, r, "/admin/login", http.StatusSeeOther)
 }

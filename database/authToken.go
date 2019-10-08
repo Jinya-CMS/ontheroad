@@ -48,25 +48,21 @@ func CreateAuthenticationToken(user *User, ipAddress string) (string, error) {
 }
 
 func EncodeToken(token Token) (string, error) {
-	var result []byte
 	serializedToken, err := json.Marshal(token)
 	if err != nil {
 		return "", err
 	}
 
-	base64.StdEncoding.Encode(result, serializedToken)
-
-	return string(result), nil
+	return base64.StdEncoding.EncodeToString(serializedToken), nil
 }
 
 func DecodeToken(token string) (*Token, error) {
-	var result []byte
-	_, err := base64.StdEncoding.Decode(result, []byte(token))
+	result, err := base64.StdEncoding.DecodeString(token)
 	if err != nil {
 		return nil, err
 	}
 
-	var deserializedToken *Token
+	deserializedToken := new(Token)
 	err = json.Unmarshal(result, deserializedToken)
 
 	return deserializedToken, err
@@ -80,9 +76,7 @@ func ValidateAuthenticationToken(token string) bool {
 
 	defer db.Close()
 
-	var (
-		count int
-	)
+	count := new(int)
 
 	deserializedToken, err := DecodeToken(token)
 	if err != nil {
@@ -91,7 +85,7 @@ func ValidateAuthenticationToken(token string) bool {
 
 	// language=sql
 	err = db.Get(count, "SELECT COUNT(*) FROM auth_token WHERE token = $1 AND user_id = $2", deserializedToken.Token, deserializedToken.UserId)
-	if err != nil || count == 0 {
+	if err != nil || *count == 0 {
 		return false
 	}
 

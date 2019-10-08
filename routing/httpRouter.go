@@ -19,7 +19,7 @@ func GetHttpRouter() *httprouter.Router {
 	router.GET("/admin/login", admin.LoginView)
 	router.POST("/admin/login", admin.LoginAction)
 
-	router.GET("/admin/user", admin.ListUser)
+	router.GET("/admin/user", AuthenticatedMiddleware(admin.ListUser))
 
 	return router
 }

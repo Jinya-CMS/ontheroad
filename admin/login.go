@@ -88,5 +88,5 @@ func LoginAction(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	}
 
 	http.SetCookie(w, &authCookie)
-	http.Redirect(w, r, "/admin/user", http.StatusTemporaryRedirect)
+	http.Redirect(w, r, "/admin/user", http.StatusSeeOther)
 }
