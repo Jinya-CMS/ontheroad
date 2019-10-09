@@ -1,3 +1,5 @@
+const defaultConfig = require('tailwindcss/defaultConfig');
+
 module.exports = {
     theme: {
         extend: {
@@ -20,9 +22,20 @@ module.exports = {
                 'secondary-700': '#6cbad1',
                 'secondary-800': '#5db3cc',
                 'secondary-900': '#4eacc7',
+                'gray-100': '#f8f9fa',
+                'gray-200': '#e9ecef',
+                'gray-300': '#dee2e6',
+                'gray-400': '#ced4da',
+                'gray-500': '#adb5bd',
+                'gray-600': '#868e96',
+                'gray-700': '#495057',
+                'gray-800': '#343a40',
+                'gray-900': '#212529',
             }
         }
     },
-    variants: {},
+    variants: {
+        backgroundColor: [...defaultConfig.variants.backgroundColor, 'odd'],
+    },
     plugins: [],
 };

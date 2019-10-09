@@ -56,21 +56,21 @@ func GetUsers(offset int, limit int, keyword string) ([]User, int, error) {
 	// language=sql prefix=SELECT * FROM user
 	whereClause := "WHERE name ilike $1 OR email ilike $1"
 	// language=sql
-	selectQuery := fmt.Sprintf("SELECT u.name AS Name, u.email AS Email, u.password AS Password, u.twoFactorCode AS TwoFactorCode FROM \"user\" u %s", whereClause)
+	selectQuery := fmt.Sprintf("SELECT u.Id AS Id, u.name AS Name, u.email AS Email, u.password AS Password, u.twoFactorCode AS TwoFactorCode FROM \"user\" u %s LIMIT $2 OFFSET $3", whereClause)
 
-	var users []User
+	users := new([]User)
 
-	err = db.Select(users, selectQuery, keyword)
+	err = db.Select(users, selectQuery, "%"+keyword+"%", limit, offset)
 	if err != nil {
 		return nil, -1, err
 	}
 
 	// language=sql
-	countQuery := fmt.Sprintf("SELECT COUNT(u.id) FROM \"user\" u")
-	var totalCount int
-	err = db.Get(totalCount, countQuery, keyword)
+	countQuery := fmt.Sprintf("SELECT COUNT(u.id) FROM \"user\" u %s", whereClause)
+	totalCount := new(int)
+	err = db.Get(totalCount, countQuery, "%"+keyword+"%")
 
-	return users, totalCount, err
+	return *users, *totalCount, err
 }
 
 func GetUser(id string) (*User, error) {
@@ -110,7 +110,7 @@ func UpdateUser(user *User) error {
 	}
 
 	defer db.Close()
-	_, err = db.Exec("UPDATE \"user\" SET name = $1, email = $2)", user.Name, user.Email)
+	_, err = db.Exec("UPDATE \"user\" SET name = $1, email = $2 WHERE id = $3", user.Name, user.Email, user.Id)
 
 	return err
 }

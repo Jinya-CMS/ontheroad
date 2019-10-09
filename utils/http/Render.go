@@ -22,7 +22,14 @@ func RenderSingle(tmpl string, tmplData interface{}, w http.ResponseWriter) {
 }
 
 func RenderAdmin(tmpl string, tmplData interface{}, w http.ResponseWriter) {
-	layout, err := template.ParseFiles(tmpl, "templates/admin/layout.html.tmpl")
+	layout, err := template.New("layout").Funcs(template.FuncMap{
+		"minus": func(a, b int) int {
+			return a - b
+		},
+		"add": func(a, b int) int {
+			return a + b
+		},
+	}).ParseFiles(tmpl, "templates/admin/layout.html.tmpl")
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return

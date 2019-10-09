@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS migrations (
 var Migrations = []Migration{
 	new(Migration20191006T165019766Z),
 	new(Migration20191008T213119766Z),
+	new(Migration20191009T215919766Z),
 }
 
 func createMigrationsTable() error {
