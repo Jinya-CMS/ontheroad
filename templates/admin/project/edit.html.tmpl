@@ -1,0 +1,56 @@
+{{define "content"}}
+    <form class="mx-auto container w-1/4 mt-16 rounded-lg shadow py-4 px-8 bg-white" method="post">
+        <header class="border-primary-200 border-b border-solid pb-8">
+            <h1 class="text-4xl text-gray-700">Edit Project {{.Project.Name}}</h1>
+        </header>
+        <section class="text-base text-gray-700 py-8">
+            {{if .HasError}}
+                <p class="mb-4 px-6 bg-red-700 text-red-100 py-4 rounded-lg">{{.Error}}</p>
+            {{end}}
+            <div class="flex flex-wrap mb-4">
+                <label for="name" class="w-full font-bold">Name</label>
+                <input required name="name" id="name" type="text" value="{{.Project.Name}}"
+                       class="py-1 px-2 border border-solid border-primary-500 rounded w-full invalid:border-red-700">
+            </div>
+            <div class="flex flex-wrap mb-4">
+                <label for="key" class="w-full font-bold">Key</label>
+                <input required name="key" id="key" type="text" value="{{.Project.Key}}"
+                       class="py-1 px-2 border border-solid border-primary-500 rounded w-full invalid:border-red-700">
+            </div>
+            <div class="flex flex-wrap mb-4">
+                <label for="youtrack_server" class="w-full font-bold">YouTrack Server</label>
+                <input required name="youtrack_server" id="youtrack_server" type="url"
+                       value="{{.Project.YouTrackServer}}"
+                       class="py-1 px-2 border border-solid border-primary-500 rounded w-full invalid:border-red-700">
+            </div>
+            <div class="flex flex-wrap mb-4">
+                <label for="query" class="w-full font-bold">Issue Query</label>
+                <input required name="query" id="query" type="text" value="{{.Project.Query}}"
+                       class="py-1 px-2 border border-solid border-primary-500 rounded w-full invalid:border-red-700">
+            </div>
+            <div class="flex flex-wrap mb-4">
+                <label for="versions_query" class="w-full font-bold">Versions Query</label>
+                <input required name="versions_query" id="versions_query" type="text" value="{{.Project.VersionsQuery}}"
+                       class="py-1 px-2 border border-solid border-primary-500 rounded w-full invalid:border-red-700">
+            </div>
+            <div class="flex flex-wrap mb-4">
+                <label for="types_query" class="w-full font-bold">Types Query</label>
+                <input required name="types_query" id="types_query" type="text" value="{{.Project.TypesQuery}}"
+                       class="py-1 px-2 border border-solid border-primary-500 rounded w-full invalid:border-red-700">
+            </div>
+            <div class="flex flex-wrap mb-4">
+                <label for="subsystems_query" class="w-full font-bold">Subsystems Query</label>
+                <input required name="subsystems_query" id="subsystems_query" type="text"
+                       value="{{.Project.SubsystemsQuery}}"
+                       class="py-1 px-2 border border-solid border-primary-500 rounded w-full invalid:border-red-700">
+            </div>
+        </section>
+        <footer class="flex border-primary-200 border-t border-solid pt-8 justify-end">
+            <a href="/admin/project"
+               class="py-1 px-2 rounded-lg bg-gray-500 text-white hover:bg-white hover:text-gray-500 border-2 border-solid border-gray-500 mr-4">Cancel</a>
+            <button class="py-1 px-2 rounded-lg bg-primary-500 text-white hover:bg-white hover:text-primary-500 border-2 border-solid border-primary-500 font-normal">
+                Update Project
+            </button>
+        </footer>
+    </form>
+{{end}}
