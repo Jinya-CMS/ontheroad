@@ -24,6 +24,8 @@ func GetHttpRouter() *httprouter.Router {
 	router.POST("/admin/user/add", AuthenticatedMiddleware(admin.AddUserAction))
 	router.GET("/admin/user/edit/:id", AuthenticatedMiddleware(admin.EditUserView))
 	router.POST("/admin/user/edit/:id", AuthenticatedMiddleware(admin.EditUserAction))
+	router.GET("/admin/user/delete/:id", AuthenticatedMiddleware(admin.DeleteUserView))
+	router.POST("/admin/user/delete/:id", AuthenticatedMiddleware(admin.DeleteUserAction))
 
 	return router
 }

@@ -12,7 +12,7 @@ func AuthenticatedMiddleware(handler func(w http.ResponseWriter, r *http.Request
 		authCookie, err := r.Cookie("auth")
 		if err != nil || authCookie == nil {
 			w.WriteHeader(http.StatusUnauthorized)
-			httpUtils.RenderSingle("templates/error/401.html.tmpl", nil, w)
+			httpUtils.RenderSingle("templates/admin/error/401.html.tmpl", nil, w)
 			return
 		}
 
@@ -22,6 +22,6 @@ func AuthenticatedMiddleware(handler func(w http.ResponseWriter, r *http.Request
 		}
 
 		w.WriteHeader(http.StatusUnauthorized)
-		httpUtils.RenderSingle("templates/error/401.html.tmpl", nil, w)
+		httpUtils.RenderSingle("templates/admin/error/401.html.tmpl", nil, w)
 	}
 }
