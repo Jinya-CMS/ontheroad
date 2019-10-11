@@ -18,6 +18,7 @@ var AuthTokenTable = `
 CREATE TABLE "auth_token" (
     id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
     token text NOT NULL,
+    ip_address text NOT NULL,
     user_id uuid NOT NULL REFERENCES "user"(id)
 )`
 

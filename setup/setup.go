@@ -4,6 +4,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 	"github.com/mholt/binding"
 	"go.jinya.de/ontheroad/database"
+	"go.jinya.de/ontheroad/database/migrations"
 	httpUtils "go.jinya.de/ontheroad/utils/http"
 	"net/http"
 	"os"
@@ -45,6 +46,12 @@ func DatabaseView(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 func DatabaseAction(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	err := database.CreateDatabase()
+	if err != nil {
+		httpUtils.RenderSingle("templates/setup/databaseError.html.tmpl", err, w)
+		return
+	}
+
+	err = migrations.Migrate()
 	if err != nil {
 		httpUtils.RenderSingle("templates/setup/databaseError.html.tmpl", err, w)
 		return

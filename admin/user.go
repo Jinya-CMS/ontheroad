@@ -10,6 +10,12 @@ import (
 	"strconv"
 )
 
+type userActionTmplData struct {
+	Error    string
+	User     *database.User
+	HasError bool
+}
+
 func ListUser(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	type listData struct {
 		Error           string
@@ -80,14 +86,9 @@ func AddUserAction(w http.ResponseWriter, r *http.Request, _ httprouter.Params) 
 
 	user := new(database.User)
 	validityErrors := binding.Bind(r, user)
-	type createUserTmplData struct {
-		Error    string
-		HasError bool
-		User     *database.User
-	}
 
 	if validityErrors != nil {
-		tmplData := createUserTmplData{
+		tmplData := userActionTmplData{
 			Error:    validityErrors.Error(),
 			HasError: true,
 			User:     user,
@@ -99,15 +100,15 @@ func AddUserAction(w http.ResponseWriter, r *http.Request, _ httprouter.Params) 
 
 	err := database.CreateUser(user)
 	if err != nil {
-		var tmplData createUserTmplData
+		var tmplData userActionTmplData
 		if pgErr, ok := err.(*pq.Error); ok {
-			tmplData = createUserTmplData{
+			tmplData = userActionTmplData{
 				Error:    pgErr.Detail,
 				HasError: true,
 				User:     user,
 			}
 		} else {
-			tmplData = createUserTmplData{
+			tmplData = userActionTmplData{
 				Error:    err.Error(),
 				HasError: true,
 				User:     user,
@@ -122,23 +123,17 @@ func AddUserAction(w http.ResponseWriter, r *http.Request, _ httprouter.Params) 
 }
 
 func EditUserView(w http.ResponseWriter, _ *http.Request, params httprouter.Params) {
-	type editUserTmplData struct {
-		Error    string
-		User     *database.User
-		HasError bool
-	}
-
 	user, err := database.GetUser(params.ByName("id"))
-	var tmplData editUserTmplData
+	var tmplData userActionTmplData
 	if err != nil {
 		if pgErr, ok := err.(*pq.Error); ok {
-			tmplData = editUserTmplData{
+			tmplData = userActionTmplData{
 				Error:    pgErr.Detail,
 				HasError: true,
 				User:     user,
 			}
 		} else {
-			tmplData = editUserTmplData{
+			tmplData = userActionTmplData{
 				Error:    err.Error(),
 				HasError: true,
 				User:     user,
@@ -149,7 +144,7 @@ func EditUserView(w http.ResponseWriter, _ *http.Request, params httprouter.Para
 		return
 	}
 
-	httpUtils.RenderAdmin("templates/admin/user/edit.html.tmpl", editUserTmplData{
+	httpUtils.RenderAdmin("templates/admin/user/edit.html.tmpl", userActionTmplData{
 		Error:    "",
 		User:     user,
 		HasError: false,
@@ -161,23 +156,18 @@ func EditUserAction(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 		EditUserView(w, r, params)
 		return
 	}
-	type editUserTmplData struct {
-		Error    string
-		HasError bool
-		User     *database.User
-	}
 
 	user, err := database.GetUser(params.ByName("id"))
 	if err != nil {
-		var tmplData editUserTmplData
+		var tmplData userActionTmplData
 		if pgErr, ok := err.(*pq.Error); ok {
-			tmplData = editUserTmplData{
+			tmplData = userActionTmplData{
 				Error:    pgErr.Detail,
 				HasError: true,
 				User:     user,
 			}
 		} else {
-			tmplData = editUserTmplData{
+			tmplData = userActionTmplData{
 				Error:    err.Error(),
 				HasError: true,
 				User:     user,
@@ -191,7 +181,7 @@ func EditUserAction(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 	validityErrors := binding.Bind(r, user)
 
 	if validityErrors != nil {
-		tmplData := editUserTmplData{
+		tmplData := userActionTmplData{
 			Error:    validityErrors.Error(),
 			HasError: true,
 			User:     user,
@@ -203,15 +193,15 @@ func EditUserAction(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 
 	err = database.UpdateUser(user)
 	if err != nil {
-		var tmplData editUserTmplData
+		var tmplData userActionTmplData
 		if pgErr, ok := err.(*pq.Error); ok {
-			tmplData = editUserTmplData{
+			tmplData = userActionTmplData{
 				Error:    pgErr.Detail,
 				HasError: true,
 				User:     user,
 			}
 		} else {
-			tmplData = editUserTmplData{
+			tmplData = userActionTmplData{
 				Error:    err.Error(),
 				HasError: true,
 				User:     user,
@@ -219,6 +209,61 @@ func EditUserAction(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 		}
 
 		httpUtils.RenderAdmin("templates/admin/user/edit.html.tmpl", tmplData, w)
+		return
+	}
+
+	http.Redirect(w, r, "/admin/user", http.StatusSeeOther)
+}
+
+func DeleteUserView(w http.ResponseWriter, _ *http.Request, params httprouter.Params) {
+	user, err := database.GetUser(params.ByName("id"))
+	var tmplData userActionTmplData
+	if err != nil {
+		if pgErr, ok := err.(*pq.Error); ok {
+			tmplData = userActionTmplData{
+				Error:    pgErr.Detail,
+				HasError: true,
+				User:     user,
+			}
+		} else {
+			tmplData = userActionTmplData{
+				Error:    err.Error(),
+				HasError: true,
+				User:     user,
+			}
+		}
+
+		httpUtils.RenderAdmin("templates/admin/user/delete.html.tmpl", tmplData, w)
+		return
+	}
+
+	httpUtils.RenderAdmin("templates/admin/user/delete.html.tmpl", userActionTmplData{
+		Error:    "",
+		User:     user,
+		HasError: false,
+	}, w)
+}
+
+func DeleteUserAction(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	err := database.DeleteUser(params.ByName("id"))
+	if err != nil {
+		user, _ := database.GetUser(params.ByName("id"))
+		var tmplData userActionTmplData
+		if pgErr, ok := err.(*pq.Error); ok {
+			tmplData = userActionTmplData{
+				Error:    pgErr.Detail,
+				HasError: true,
+				User:     user,
+			}
+		} else {
+			tmplData = userActionTmplData{
+				Error:    err.Error(),
+				HasError: true,
+				User:     user,
+			}
+		}
+
+		httpUtils.RenderAdmin("templates/admin/user/delete.html.tmpl", tmplData, w)
 		return
 	}
 

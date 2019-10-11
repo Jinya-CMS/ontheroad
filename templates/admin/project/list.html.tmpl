@@ -1,7 +1,7 @@
 {{define "content"}}
     <div class="mx-auto container mt-16 rounded-lg shadow py-4 px-8 bg-white">
         <header class="border-primary-200 border-b border-solid pb-8">
-            <h1 class="text-4xl text-gray-700 w-auto">Users</h1>
+            <h1 class="text-4xl text-gray-700 w-auto">Projects</h1>
         </header>
         <form method="get" class="flex mt-2 items-baseline">
             <input type="search" value="{{.Keyword}}"
@@ -11,9 +11,9 @@
                     class="font-normal p-1 pr-4 rounded-full bg-primary-500 text-white hover:bg-white hover:text-primary-500 border rounded-l-none border-solid border-primary-500">
                 Search
             </button>
-            <a href="/admin/user/add"
+            <a href="/admin/project/add"
                class="py-1 px-2 rounded-lg bg-primary-500 text-white hover:bg-white hover:text-primary-500 border-2 border-solid border-primary-500 ml-auto">
-                Add User
+                Add Project
             </a>
         </form>
         <table class="border-collapse w-full text-base text-gray-700 mt-8 table-auto">
@@ -21,22 +21,28 @@
             <tr class="border-b-2 border-primary-900">
                 <th class="p-2">Id</th>
                 <th class="p-2">Name</th>
-                <th class="p-2">Email</th>
+                <th class="p-2">Key</th>
+                <th class="p-2">YouTrack Server</th>
             </tr>
             </thead>
             <tbody>
-            {{range .Users}}
+            {{range .Projects}}
                 <tr class="odd:bg-gray-100">
                     <td class="p-2">
-                        <a class="text-primary-700 hover:underline" href="/admin/user/edit/{{.Id}}">{{.Id}}</a>
+                        <a class="text-primary-700 hover:underline" href="/admin/project/details/{{.Id}}">{{.Id}}</a>
                     </td>
                     <td class="p-2">{{.Name}}</td>
+                    <td class="p-2">{{.Key}}</td>
                     <td class="p-2">
-                        <div class="flex">
-                            {{.Email}}
-                            <a href="/admin/user/delete/{{.Id}}"
-                               class="p-1 rounded-lg bg-red-500 text-white hover:bg-white hover:text-red-500 text-sm border-2 border-solid border-red-500 ml-auto">
-                                Delete User
+                        <div class="flex items-baseline">
+                            {{.YouTrackServer}}
+                            <a href="/admin/project/edit/{{.Id}}"
+                               class="p-1 rounded-lg bg-teal-500 text-white hover:bg-white hover:text-teal-500 text-sm border-2 border-solid border-teal-500 ml-auto mr-2">
+                                Edit Project
+                            </a>
+                            <a href="/admin/project/delete/{{.Id}}"
+                               class="p-1 rounded-lg bg-red-500 text-white hover:bg-white hover:text-red-500 text-sm border-2 border-solid border-red-500">
+                                Delete Project
                             </a>
                         </div>
                     </td>
@@ -45,10 +51,10 @@
             </tbody>
             <tfoot class="mt-2 border-t-2 border-primary-900">
             <tr>
-                <td colspan="3">
+                <td colspan="4">
                     <div class="flex justify-between items-baseline p-2">
                         {{if .PreviousEnabled}}
-                            <a href="/admin/user?offset={{minus .CurrentOffset 10}}&keyword={{.Keyword}}"
+                            <a href="/admin/project?offset={{minus .CurrentOffset 10}}&keyword={{.Keyword}}"
                                class="py-1 px-2 rounded-lg bg-primary-500 text-white hover:bg-white hover:text-primary-500 border-2 border-solid border-primary-500 mr-auto">
                                 Previous
                             </a>
@@ -57,9 +63,9 @@
                                 Previous
                             </span>
                         {{end}}
-                        <span>Users from {{add .CurrentOffset 1}} to {{add .CurrentOffset 10}} of {{.TotalCount}}</span>
+                        <span>Projects from {{add .CurrentOffset 1}} to {{add .CurrentOffset 10}} of {{.TotalCount}}</span>
                         {{if .NextEnabled}}
-                            <a href="/admin/user?offset={{add .CurrentOffset 10}}&keyword={{.Keyword}}"
+                            <a href="/admin/project?offset={{add .CurrentOffset 10}}&keyword={{.Keyword}}"
                                class="py-1 px-2 rounded-lg bg-primary-500 text-white hover:bg-white hover:text-primary-500 border-2 border-solid border-primary-500 ml-auto">
                                 Next
                             </a>

@@ -142,3 +142,16 @@ func ValidateEmailAndPassword(email string, password string) (*User, error) {
 
 	return user, nil
 }
+
+func DeleteUser(id string) error {
+	db, err := Connect()
+	if err != nil {
+		return err
+	}
+
+	defer db.Close()
+
+	_, err = db.Exec("DELETE FROM \"user\" WHERE id = $1", id)
+
+	return err
+}

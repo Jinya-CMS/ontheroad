@@ -1,0 +1,63 @@
+{{define "content"}}
+    <div class="mx-auto container w-1/4 mt-16 rounded-lg shadow py-4 px-8 bg-white" method="post">
+        <header class="border-primary-200 border-b border-solid pb-8">
+            <h1 class="text-4xl text-gray-700">Edit Project {{.Project.Name}}</h1>
+        </header>
+        <section class="text-base text-gray-700 py-8">
+            {{if .HasError}}
+                <p class="mb-4 px-6 bg-red-700 text-red-100 py-4 rounded-lg">{{.Error}}</p>
+            {{end}}
+            <div class="flex flex-wrap mb-4">
+                <label for="name" class="w-full font-bold">Name</label>
+                <span class="w-full block">{{.Project.Name}}</span>
+            </div>
+            <div class="flex flex-wrap mb-4">
+                <label for="key" class="w-full font-bold">Key</label>
+                <span id="key" class="w-full block">{{.Project.Key}}</span>
+            </div>
+            <div class="flex flex-wrap mb-4">
+                <label for="youtrack_server" class="w-full font-bold">YouTrack Server</label>
+                <a href="{{.Project.YouTrackServer}}" id="youtrack_server"
+                   class="w-full block hover:underline hover:text-primary-500" target="_blank">
+                    {{.Project.YouTrackServer}}
+                </a>
+            </div>
+            <div class="flex flex-wrap mb-4">
+                <label for="query" class="w-full font-bold">Issue Query</label>
+                <span id="query" class="w-full block">{{.Project.Query}}</span>
+            </div>
+            {{if .Project.VersionsQuery}}
+                <div class="flex flex-wrap mb-4">
+                    <label for="versions_query" class="w-full font-bold">Versions Query</label>
+                    <a href="{{.Project.YouTrackServer}}{{.Project.VersionsQuery}}" id="versions_query"
+                       class="w-full block hover:underline hover:text-primary-500"
+                       target="_blank">{{.Project.VersionsQuery}}</a>
+                </div>
+            {{end}}
+            {{if .Project.TypesQuery}}
+                <div class="flex flex-wrap mb-4">
+                    <label for="types_query" class="w-full font-bold">Types Query</label>
+                    <a href="{{.Project.YouTrackServer}}{{.Project.TypesQuery}}" id="types_query"
+                       class="w-full block hover:underline hover:text-primary-500"
+                       target="_blank">{{.Project.TypesQuery}}</a>
+                </div>
+            {{end}}
+            {{if .Project.SubsystemsQuery}}
+                <div class="flex flex-wrap mb-4">
+                    <label for="subsystems_query" class="w-full font-bold">Subsystems Query</label>
+                    <a href="{{.Project.YouTrackServer}}{{.Project.SubsystemsQuery}}" id="subsystems_query"
+                       class="w-full block hover:underline hover:text-primary-500"
+                       target="_blank">{{.Project.SubsystemsQuery}}</a>
+                </div>
+            {{end}}
+        </section>
+        <footer class="flex border-primary-200 border-t border-solid pt-8 justify-end">
+            <a href="/admin/project"
+               class="py-1 px-2 rounded-lg bg-gray-500 text-white hover:bg-white hover:text-gray-500 border-2 border-solid border-gray-500 mr-4">Back</a>
+            <a href="/admin/project/edit/{{.Project.Id}}"
+               class="py-1 px-2 rounded-lg bg-primary-500 text-white hover:bg-white hover:text-primary-500 border-2 border-solid border-primary-500 font-normal">
+                Edit Project
+            </a>
+        </footer>
+    </div>
+{{end}}
