@@ -10,7 +10,6 @@ import (
 type Project struct {
 	Id              string
 	Name            string
-	Query           string
 	YouTrackServer  string
 	VersionsQuery   string
 	SubsystemsQuery string
@@ -24,11 +23,6 @@ func (project *Project) FieldMap(r *http.Request) binding.FieldMap {
 			Form:         "name",
 			Required:     true,
 			ErrorMessage: "The name is required",
-		},
-		&project.Query: binding.Field{
-			Form:         "query",
-			Required:     true,
-			ErrorMessage: "The query is required",
 		},
 		&project.YouTrackServer: binding.Field{
 			Form:         "youtrack_server",
@@ -55,7 +49,6 @@ func (project *Project) FieldMap(r *http.Request) binding.FieldMap {
 type databaseProject struct {
 	Id              string
 	Name            string
-	Query           string
 	YouTrackServer  string
 	VersionsQuery   sql.NullString
 	SubsystemsQuery sql.NullString
@@ -67,7 +60,6 @@ func (dbProj *databaseProject) ToBindableProject() Project {
 	project := Project{
 		Id:             dbProj.Id,
 		Name:           dbProj.Name,
-		Query:          dbProj.Query,
 		YouTrackServer: dbProj.YouTrackServer,
 		Key:            dbProj.Key,
 	}
@@ -154,7 +146,7 @@ func CreateProject(project *Project) error {
 
 	defer db.Close()
 
-	_, err = db.Exec("INSERT INTO \"project\" (name, youtrackServer, query, key, versionsQuery, typesQuery, subsystemsQuery) VALUES ($1, $2, $3, $4, $5, $6, $7)", project.Name, project.YouTrackServer, project.Query, project.Key, project.VersionsQuery, project.TypesQuery, project.SubsystemsQuery)
+	_, err = db.Exec("INSERT INTO \"project\" (name, youtrackServer, key, versionsQuery, typesQuery, subsystemsQuery) VALUES ($1, $2, $3, $4, $5, $6)", project.Name, project.YouTrackServer, project, project.Key, project.VersionsQuery, project.TypesQuery, project.SubsystemsQuery)
 
 	return err
 }
@@ -166,7 +158,7 @@ func UpdateProject(project *Project) error {
 	}
 
 	defer db.Close()
-	_, err = db.Exec("UPDATE \"project\" SET name = $1, youtrackServer = $2, query = $3, key = $4, versionsQuery = $5, typesQuery = $6, subsystemsQuery = $7 WHERE id = $8", project.Name, project.YouTrackServer, project.Query, project.Key, project.VersionsQuery, project.TypesQuery, project.SubsystemsQuery, project.Id)
+	_, err = db.Exec("UPDATE \"project\" SET name = $1, youtrackServer = $2, key = $3, versionsQuery = $4, typesQuery = $5, subsystemsQuery = $6 WHERE id = $7", project.Name, project.YouTrackServer, project.Key, project.VersionsQuery, project.TypesQuery, project.SubsystemsQuery, project.Id)
 
 	return err
 }
