@@ -5,7 +5,7 @@ import "go.jinya.de/ontheroad/database"
 type Migration20191009T215919766Z struct {
 }
 
-func (migation *Migration20191009T215919766Z) GetVersion() string {
+func (migration *Migration20191009T215919766Z) GetVersion() string {
 	return "20191009T215919766Z"
 }
 
