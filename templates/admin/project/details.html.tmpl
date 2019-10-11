@@ -26,22 +26,28 @@
                 <label for="query" class="w-full font-bold">Issue Query</label>
                 <span id="query" class="w-full block">{{.Project.Query}}</span>
             </div>
-            {{if .Project.VersionsQuery.Valid}}
+            {{if .Project.VersionsQuery}}
                 <div class="flex flex-wrap mb-4">
                     <label for="versions_query" class="w-full font-bold">Versions Query</label>
-                    <span id="versions_query" class="w-full block">{{.Project.VersionsQuery}}</span>
+                    <a href="{{.Project.YouTrackServer}}{{.Project.VersionsQuery}}" id="versions_query"
+                       class="w-full block hover:underline hover:text-primary-500"
+                       target="_blank">{{.Project.VersionsQuery}}</a>
                 </div>
             {{end}}
-            {{if .Project.TypesQuery.Valid}}
+            {{if .Project.TypesQuery}}
                 <div class="flex flex-wrap mb-4">
                     <label for="types_query" class="w-full font-bold">Types Query</label>
-                    <span id="types_query" class="w-full block">{{.Project.TypesQuery}}</span>
+                    <a href="{{.Project.YouTrackServer}}{{.Project.TypesQuery}}" id="types_query"
+                       class="w-full block hover:underline hover:text-primary-500"
+                       target="_blank">{{.Project.TypesQuery}}</a>
                 </div>
             {{end}}
-            {{if .Project.SubsystemsQuery.Valid}}
+            {{if .Project.SubsystemsQuery}}
                 <div class="flex flex-wrap mb-4">
                     <label for="subsystems_query" class="w-full font-bold">Subsystems Query</label>
-                    <span id="subsystems_query" class="w-full block">{{.Project.SubsystemsQuery}}</span>
+                    <a href="{{.Project.YouTrackServer}}{{.Project.SubsystemsQuery}}" id="subsystems_query"
+                       class="w-full block hover:underline hover:text-primary-500"
+                       target="_blank">{{.Project.SubsystemsQuery}}</a>
                 </div>
             {{end}}
         </section>

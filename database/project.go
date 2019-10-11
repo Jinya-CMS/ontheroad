@@ -12,9 +12,9 @@ type Project struct {
 	Name            string
 	Query           string
 	YouTrackServer  string
-	VersionsQuery   sql.NullString
-	SubsystemsQuery sql.NullString
-	TypesQuery      sql.NullString
+	VersionsQuery   string
+	SubsystemsQuery string
+	TypesQuery      string
 	Key             string
 }
 
@@ -36,16 +36,13 @@ func (project *Project) FieldMap(r *http.Request) binding.FieldMap {
 			ErrorMessage: "The YouTrack server is required",
 		},
 		&project.SubsystemsQuery: binding.Field{
-			Form:     "subsystems_query",
-			Required: true,
+			Form: "subsystems_query",
 		},
 		&project.TypesQuery: binding.Field{
-			Form:     "types_query",
-			Required: true,
+			Form: "types_query",
 		},
 		&project.VersionsQuery: binding.Field{
-			Form:     "versions_query",
-			Required: true,
+			Form: "versions_query",
 		},
 		&project.Key: binding.Field{
 			Form:         "key",
@@ -53,6 +50,41 @@ func (project *Project) FieldMap(r *http.Request) binding.FieldMap {
 			ErrorMessage: "The key is required",
 		},
 	}
+}
+
+type databaseProject struct {
+	Id              string
+	Name            string
+	Query           string
+	YouTrackServer  string
+	VersionsQuery   sql.NullString
+	SubsystemsQuery sql.NullString
+	TypesQuery      sql.NullString
+	Key             string
+}
+
+func (dbProj *databaseProject) ToBindableProject() Project {
+	project := Project{
+		Id:             dbProj.Id,
+		Name:           dbProj.Name,
+		Query:          dbProj.Query,
+		YouTrackServer: dbProj.YouTrackServer,
+		Key:            dbProj.Key,
+	}
+
+	if dbProj.TypesQuery.Valid {
+		project.TypesQuery = dbProj.TypesQuery.String
+	}
+
+	if dbProj.VersionsQuery.Valid {
+		project.VersionsQuery = dbProj.VersionsQuery.String
+	}
+
+	if dbProj.SubsystemsQuery.Valid {
+		project.SubsystemsQuery = dbProj.SubsystemsQuery.String
+	}
+
+	return project
 }
 
 // language=sql
@@ -80,9 +112,9 @@ func GetProjects(offset int, limit int, keyword string) ([]Project, int, error) 
 	// language=sql
 	selectQuery := fmt.Sprintf("SELECT p.Id AS Id, p.name AS Name, p.key AS Key, p.query AS Query, p.youtrackserver AS YouTrackServer, p.versionsquery AS VersionsQuery, p.subsystemsQuery AS SubsystemsQuery, p.typesQuery AS TypesQuery, p.key AS Key FROM project p %s LIMIT $2 OFFSET $3", whereClause)
 
-	projects := new([]Project)
+	databaseProjects := new([]databaseProject)
 
-	err = db.Select(projects, selectQuery, "%"+keyword+"%", limit, offset)
+	err = db.Select(databaseProjects, selectQuery, "%"+keyword+"%", limit, offset)
 	if err != nil {
 		return nil, -1, err
 	}
@@ -92,7 +124,12 @@ func GetProjects(offset int, limit int, keyword string) ([]Project, int, error) 
 	totalCount := new(int)
 	err = db.Get(totalCount, countQuery, "%"+keyword+"%")
 
-	return *projects, *totalCount, err
+	projects := make([]Project, len(*databaseProjects))
+	for idx, project := range *databaseProjects {
+		projects[idx] = project.ToBindableProject()
+	}
+
+	return projects, *totalCount, err
 }
 
 func GetProject(id string) (*Project, error) {
@@ -102,10 +139,11 @@ func GetProject(id string) (*Project, error) {
 	}
 
 	defer db.Close()
-	project := new(Project)
-	err = db.Get(project, "SELECT * FROM \"project\" WHERE id = $1", id)
+	databaseProject := new(databaseProject)
+	err = db.Get(databaseProject, "SELECT * FROM \"project\" WHERE id = $1", id)
+	project := databaseProject.ToBindableProject()
 
-	return project, err
+	return &project, err
 }
 
 func CreateProject(project *Project) error {
@@ -116,7 +154,7 @@ func CreateProject(project *Project) error {
 
 	defer db.Close()
 
-	_, err = db.Exec("INSERT INTO \"project\" (name, youtrackServer, query, key) VALUES ($1, $2, $3, $4)", project.Name, project.YouTrackServer, project.Query, project.Key)
+	_, err = db.Exec("INSERT INTO \"project\" (name, youtrackServer, query, key, versionsQuery, typesQuery, subsystemsQuery) VALUES ($1, $2, $3, $4, $5, $6, $7)", project.Name, project.YouTrackServer, project.Query, project.Key, project.VersionsQuery, project.TypesQuery, project.SubsystemsQuery)
 
 	return err
 }
@@ -128,7 +166,7 @@ func UpdateProject(project *Project) error {
 	}
 
 	defer db.Close()
-	_, err = db.Exec("UPDATE \"project\" SET name = $1, youtrackServer = $2, query = $3, key = $4 WHERE id = $5", project.Name, project.YouTrackServer, project.Query, project.Key, project.Id)
+	_, err = db.Exec("UPDATE \"project\" SET name = $1, youtrackServer = $2, query = $3, key = $4, versionsQuery = $5, typesQuery = $6, subsystemsQuery = $7 WHERE id = $8", project.Name, project.YouTrackServer, project.Query, project.Key, project.VersionsQuery, project.TypesQuery, project.SubsystemsQuery, project.Id)
 
 	return err
 }
