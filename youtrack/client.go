@@ -13,7 +13,7 @@ import (
 )
 
 type Client struct {
-	project database.Project
+	Project database.Project
 }
 
 func getEnumBundle(server string, query string) ([]EnumType, error) {
@@ -49,19 +49,19 @@ func getEnumBundle(server string, query string) ([]EnumType, error) {
 }
 
 func (client *Client) GetVersions() ([]EnumType, error) {
-	return getEnumBundle(client.project.YouTrackServer, client.project.VersionsQuery)
+	return getEnumBundle(client.Project.YouTrackServer, client.Project.VersionsQuery)
 }
 
 func (client *Client) GetSubsystems() ([]EnumType, error) {
-	return getEnumBundle(client.project.YouTrackServer, client.project.SubsystemsQuery)
+	return getEnumBundle(client.Project.YouTrackServer, client.Project.SubsystemsQuery)
 }
 
 func (client *Client) GetTypes() ([]EnumType, error) {
-	return getEnumBundle(client.project.YouTrackServer, client.project.TypesQuery)
+	return getEnumBundle(client.Project.YouTrackServer, client.Project.TypesQuery)
 }
 
 func (client *Client) GetIssues(versions []string, subsystems []string, types []string, orderField string, orderDirection string) ([]Issue, error) {
-	query := fmt.Sprintf("project:%s", client.project.Key)
+	query := fmt.Sprintf("Project:%s", client.Project.Key)
 
 	typesPrepared := make([]string, len(types))
 	for idx, typ := range types {
@@ -94,7 +94,7 @@ func (client *Client) GetIssues(versions []string, subsystems []string, types []
 
 	resp, err := http.Get(fmt.Sprintf(
 		"%s/api/issues?query=%s&fields=id,summary,customFields(id,projectCustomField(id,field(id,name)),value(isResolved,localizedName,name,text))",
-		client.project.YouTrackServer,
+		client.Project.YouTrackServer,
 		escapedQuery))
 	if err != nil {
 		return nil, err

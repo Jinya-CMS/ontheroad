@@ -3,6 +3,7 @@ package routing
 import (
 	"github.com/julienschmidt/httprouter"
 	"go.jinya.de/ontheroad/admin"
+	"go.jinya.de/ontheroad/api"
 	"go.jinya.de/ontheroad/setup"
 	"net/http"
 )
@@ -47,6 +48,8 @@ func GetHttpRouter() *httprouter.Router {
 	router.POST("/admin/project/edit/:id", AuthenticatedMiddleware(admin.EditProjectAction))
 	router.GET("/admin/project/delete/:id", AuthenticatedMiddleware(admin.DeleteProjectView))
 	router.POST("/admin/project/delete/:id", AuthenticatedMiddleware(admin.DeleteProjectAction))
+
+	router.GET("/api/:id/versions", api.GetAllVersionsAction)
 
 	return router
 }
