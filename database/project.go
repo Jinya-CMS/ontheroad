@@ -102,7 +102,7 @@ func GetProjects(offset int, limit int, keyword string) ([]Project, int, error) 
 	// language=sql prefix="SELECT * FROM project "
 	whereClause := "WHERE name ilike $1"
 	// language=sql
-	selectQuery := fmt.Sprintf("SELECT p.Id AS Id, p.name AS Name, p.key AS Key, p.query AS Query, p.youtrackserver AS YouTrackServer, p.versionsquery AS VersionsQuery, p.subsystemsQuery AS SubsystemsQuery, p.typesQuery AS TypesQuery, p.key AS Key FROM project p %s LIMIT $2 OFFSET $3", whereClause)
+	selectQuery := fmt.Sprintf("SELECT p.Id AS Id, p.name AS Name, p.key AS Key, p.youtrackserver AS YouTrackServer, p.versionsquery AS VersionsQuery, p.subsystemsQuery AS SubsystemsQuery, p.typesQuery AS TypesQuery, p.key AS Key FROM project p %s LIMIT $2 OFFSET $3", whereClause)
 
 	databaseProjects := new([]databaseProject)
 
@@ -146,7 +146,7 @@ func CreateProject(project *Project) error {
 
 	defer db.Close()
 
-	_, err = db.Exec("INSERT INTO \"project\" (name, youtrackServer, key, versionsQuery, typesQuery, subsystemsQuery) VALUES ($1, $2, $3, $4, $5, $6)", project.Name, project.YouTrackServer, project, project.Key, project.VersionsQuery, project.TypesQuery, project.SubsystemsQuery)
+	_, err = db.Exec("INSERT INTO \"project\" (name, youtrackServer, key, versionsQuery, typesQuery, subsystemsQuery) VALUES ($1, $2, $3, $4, $5, $6)", project.Name, project.YouTrackServer, project.Key, project.VersionsQuery, project.TypesQuery, project.SubsystemsQuery)
 
 	return err
 }

@@ -1,22 +1,22 @@
 {{define "content"}}
     <form class="mx-auto container w-1/4 mt-16 rounded-lg shadow py-4 px-8 bg-white" method="post">
         <header class="border-primary-200 border-b border-solid pb-8">
-            <h1 class="text-4xl text-red-700">Delete {{.User.Name}}</h1>
+            <h1 class="text-4xl text-red-700">Delete {{.Project.Name}}</h1>
         </header>
         <section class="text-base text-gray-700 py-8">
             {{if .HasError}}
                 <p class="mb-4 px-6 bg-red-700 text-red-100 py-4 rounded-lg">{{.Error}}</p>
             {{end}}
             <p>
-                Please confirm, that you want to delete the user {{.User.Name}}.
+                Please confirm, that you want to delete the project {{.Project.Name}}.
             </p>
         </section>
         <footer class="flex border-primary-200 border-t border-solid pt-8 justify-end">
-            <a href="/admin/user"
+            <a href="/admin/project"
                class="py-1 px-2 rounded-lg bg-gray-500 text-white hover:bg-white hover:text-gray-500 border-2 border-solid border-gray-500 mr-4">Cancel</a>
             <button class="py-1 px-2 rounded-lg bg-red-500 text-white hover:bg-white hover:text-red-500 border-2 border-solid border-red-500 font-normal"
                     type="submit">
-                Delete User
+                Delete Project
             </button>
         </footer>
     </form>
