@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-func GetAllVersionsAction(w http.ResponseWriter, _ *http.Request, params httprouter.Params) {
+func GetAllSubsystemsAction(w http.ResponseWriter, _ *http.Request, params httprouter.Params) {
 	projectId := params.ByName("id")
 	project, err := database.GetProject(projectId)
 	if err != nil {
@@ -18,14 +18,14 @@ func GetAllVersionsAction(w http.ResponseWriter, _ *http.Request, params httprou
 	}
 
 	youtrackClient := youtrack.Client{Project: *project}
-	versions, err := youtrackClient.GetVersions()
+	subsystems, err := youtrackClient.GetSubsystems()
 	if err != nil {
 		w.WriteHeader(500)
 		_, _ = w.Write([]byte(err.Error()))
 		return
 	}
 
-	result, err := json.Marshal(versions)
+	result, err := json.Marshal(subsystems)
 	if err != nil {
 		w.WriteHeader(500)
 		_, _ = w.Write([]byte(err.Error()))

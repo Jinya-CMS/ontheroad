@@ -49,7 +49,8 @@ func GetHttpRouter() *httprouter.Router {
 	router.GET("/admin/project/delete/:id", AuthenticatedMiddleware(admin.DeleteProjectView))
 	router.POST("/admin/project/delete/:id", AuthenticatedMiddleware(admin.DeleteProjectAction))
 
-	router.GET("/api/:id/versions", api.GetAllVersionsAction)
+	router.GET("/api/:id/version", api.GetAllVersionsAction)
+	router.GET("/api/:id/subsystem", api.GetAllSubsystemsAction)
 
 	return router
 }
