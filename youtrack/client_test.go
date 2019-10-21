@@ -8,7 +8,7 @@ import (
 
 func TestClient_GetVersions(t *testing.T) {
 	project := database.Project{
-		YouTrackServer: "https://jinya.myjetbrains.com/youtrack",
+		YouTrackServer: "https://jinya.myjetbrains.com/youtrack/",
 		VersionsQuery:  "api/admin/customFieldSettings/bundles/version/71-2",
 	}
 
@@ -34,7 +34,7 @@ func TestClient_GetVersions(t *testing.T) {
 
 func TestClient_GetSubsystems(t *testing.T) {
 	project := database.Project{
-		YouTrackServer:  "https://jinya.myjetbrains.com/youtrack",
+		YouTrackServer:  "https://jinya.myjetbrains.com/youtrack/",
 		SubsystemsQuery: "api/admin/customFieldSettings/bundles/ownedField/144-2",
 	}
 
@@ -60,7 +60,7 @@ func TestClient_GetSubsystems(t *testing.T) {
 
 func TestClient_GetTypes(t *testing.T) {
 	project := database.Project{
-		YouTrackServer: "https://jinya.myjetbrains.com/youtrack",
+		YouTrackServer: "https://jinya.myjetbrains.com/youtrack/",
 		TypesQuery:     "api/admin/customFieldSettings/bundles/enum/66-7",
 	}
 
@@ -86,7 +86,7 @@ func TestClient_GetTypes(t *testing.T) {
 
 func TestClient_GetIssuesWithoutFilter(t *testing.T) {
 	project := database.Project{
-		YouTrackServer: "https://jinya.myjetbrains.com/youtrack",
+		YouTrackServer: "https://jinya.myjetbrains.com/youtrack/",
 		Key:            "JGCMS",
 	}
 
@@ -110,7 +110,7 @@ func TestClient_GetIssuesWithoutFilter(t *testing.T) {
 
 func TestClient_GetIssuesFilteredByType(t *testing.T) {
 	project := database.Project{
-		YouTrackServer: "https://jinya.myjetbrains.com/youtrack",
+		YouTrackServer: "https://jinya.myjetbrains.com/youtrack/",
 		TypesQuery:     "api/admin/customFieldSettings/bundles/enum/66-9",
 		Key:            "JGCMS",
 	}
@@ -148,7 +148,7 @@ func TestClient_GetIssuesFilteredByType(t *testing.T) {
 
 func TestClient_GetIssuesFilteredByVersion(t *testing.T) {
 	project := database.Project{
-		YouTrackServer: "https://jinya.myjetbrains.com/youtrack",
+		YouTrackServer: "https://jinya.myjetbrains.com/youtrack/",
 		VersionsQuery:  "api/admin/customFieldSettings/bundles/version/71-2",
 		Key:            "JGCMS",
 	}
@@ -186,7 +186,7 @@ func TestClient_GetIssuesFilteredByVersion(t *testing.T) {
 
 func TestClient_GetIssuesFilteredBySubsystem(t *testing.T) {
 	project := database.Project{
-		YouTrackServer:  "https://jinya.myjetbrains.com/youtrack",
+		YouTrackServer:  "https://jinya.myjetbrains.com/youtrack/",
 		SubsystemsQuery: "api/admin/customFieldSettings/bundles/ownedField/144-1",
 		Key:             "JGCMS",
 	}

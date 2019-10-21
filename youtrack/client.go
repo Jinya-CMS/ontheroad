@@ -17,7 +17,7 @@ type Client struct {
 }
 
 func getEnumBundle(server string, query string) ([]EnumType, error) {
-	reqUrl := fmt.Sprintf("%s/%s?fields=%s", server, query, url.QueryEscape("values(id,description,ordinal,name)"))
+	reqUrl := fmt.Sprintf("%s%s?fields=%s", server, query, url.QueryEscape("values(id,description,ordinal,name)"))
 	resp, err := http.Get(reqUrl)
 	if err != nil {
 		return nil, err
@@ -93,7 +93,7 @@ func (client *Client) GetIssues(versions []string, subsystems []string, types []
 	escapedQuery := url.QueryEscape(query)
 
 	resp, err := http.Get(fmt.Sprintf(
-		"%s/api/issues?query=%s&fields=id,summary,customFields(id,projectCustomField(id,field(id,name)),value(isResolved,localizedName,name,text))",
+		"%sapi/issues?query=%s&fields=id,summary,customFields(id,projectCustomField(id,field(id,name)),value(isResolved,localizedName,name,text))",
 		client.Project.YouTrackServer,
 		escapedQuery))
 	if err != nil {
