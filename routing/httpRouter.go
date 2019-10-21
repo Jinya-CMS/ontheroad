@@ -52,6 +52,7 @@ func GetHttpRouter() *httprouter.Router {
 	router.GET("/api/:id/version", api.GetAllVersionsAction)
 	router.GET("/api/:id/subsystem", api.GetAllSubsystemsAction)
 	router.GET("/api/:id/types", api.GetAllTypesAction)
+	router.GET("/api/:id/issues", api.GetIssuesAction)
 
 	return router
 }

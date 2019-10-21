@@ -7,7 +7,7 @@ var TestProject = database.Project{
 	Name:            "Jinya Gallery CMS",
 	YouTrackServer:  "https://jinya.myjetbrains.com/youtrack/",
 	VersionsQuery:   "api/admin/customFieldSettings/bundles/version/71-2",
-	SubsystemsQuery: "api/admin/customFieldSettings/bundles/enum/66-9",
+	SubsystemsQuery: "api/admin/customFieldSettings/bundles/ownedField/144-1",
 	TypesQuery:      "api/admin/customFieldSettings/bundles/enum/66-7",
 	Key:             "JGCMS",
 }

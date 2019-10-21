@@ -12,7 +12,7 @@ func GetAllVersionsAction(w http.ResponseWriter, _ *http.Request, params httprou
 	projectId := params.ByName("id")
 	project, err := database.GetProject(projectId)
 	if err != nil {
-		w.WriteHeader(500)
+		w.WriteHeader(http.StatusInternalServerError)
 		_, _ = w.Write([]byte(err.Error()))
 		return
 	}
@@ -20,14 +20,14 @@ func GetAllVersionsAction(w http.ResponseWriter, _ *http.Request, params httprou
 	youtrackClient := youtrack.Client{Project: *project}
 	versions, err := youtrackClient.GetVersions()
 	if err != nil {
-		w.WriteHeader(500)
+		w.WriteHeader(http.StatusInternalServerError)
 		_, _ = w.Write([]byte(err.Error()))
 		return
 	}
 
 	result, err := json.Marshal(versions)
 	if err != nil {
-		w.WriteHeader(500)
+		w.WriteHeader(http.StatusInternalServerError)
 		_, _ = w.Write([]byte(err.Error()))
 		return
 	}

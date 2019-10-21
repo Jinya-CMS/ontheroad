@@ -12,7 +12,7 @@ func GetAllTypesAction(w http.ResponseWriter, _ *http.Request, params httprouter
 	projectId := params.ByName("id")
 	project, err := database.GetProject(projectId)
 	if err != nil {
-		w.WriteHeader(500)
+		w.WriteHeader(http.StatusInternalServerError)
 		_, _ = w.Write([]byte(err.Error()))
 		return
 	}
@@ -20,14 +20,14 @@ func GetAllTypesAction(w http.ResponseWriter, _ *http.Request, params httprouter
 	youtrackClient := youtrack.Client{Project: *project}
 	types, err := youtrackClient.GetTypes()
 	if err != nil {
-		w.WriteHeader(500)
+		w.WriteHeader(http.StatusInternalServerError)
 		_, _ = w.Write([]byte(err.Error()))
 		return
 	}
 
 	result, err := json.Marshal(types)
 	if err != nil {
-		w.WriteHeader(500)
+		w.WriteHeader(http.StatusInternalServerError)
 		_, _ = w.Write([]byte(err.Error()))
 		return
 	}

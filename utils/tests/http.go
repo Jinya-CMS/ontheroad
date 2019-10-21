@@ -9,6 +9,7 @@ type Response struct {
 	t            *testing.T
 	expectedCode int
 	expectedBody string
+	handleBody   *func([]byte)
 }
 
 func NewResponse(t *testing.T, expectedCode int, expectedBody string) Response {
@@ -16,6 +17,15 @@ func NewResponse(t *testing.T, expectedCode int, expectedBody string) Response {
 		t:            t,
 		expectedCode: expectedCode,
 		expectedBody: expectedBody,
+		handleBody:   nil,
+	}
+}
+
+func NewResponseWithHandleBody(t *testing.T, expectedCode int, handleBody func([]byte)) Response {
+	return Response{
+		t:            t,
+		expectedCode: expectedCode,
+		handleBody:   &handleBody,
 	}
 }
 
@@ -34,6 +44,9 @@ func (r Response) Write(data []byte) (int, error) {
 		r.t.Error()
 
 		return 0, nil
+	} else if r.handleBody != nil {
+		fun := *r.handleBody
+		fun(data)
 	}
 
 	return 0, nil
