@@ -129,3 +129,19 @@ func TestGetIssuesActionByTypes(t *testing.T) {
 		Value: dummy_data.TestProject.Id,
 	}})
 }
+
+func TestGetIssuesActionOrderedBySummary(t *testing.T) {
+	request := httptest.NewRequest("GET", "/issues?orderBy=summery", nil)
+	response := tests.NewResponseWithHandleBody(t, http.StatusOK, func(data []byte) {
+		var issues []youtrack.Issue
+		err := json.Unmarshal(data, &issues)
+		if err != nil {
+			t.Error(err)
+		}
+	})
+
+	GetIssuesAction(response, request, httprouter.Params{httprouter.Param{
+		Key:   "id",
+		Value: dummy_data.TestProject.Id,
+	}})
+}
