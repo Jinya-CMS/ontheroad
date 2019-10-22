@@ -89,7 +89,7 @@ CREATE TABLE "project" (
     versionsQuery text,
     subsystemsQuery text,
     typesQuery text,
-    key text NOT NULL
+    key text NOT NULL UNIQUE
 )`
 
 func GetProjects(offset int, limit int, keyword string) ([]Project, int, error) {
@@ -124,6 +124,31 @@ func GetProjects(offset int, limit int, keyword string) ([]Project, int, error) 
 	return projects, *totalCount, err
 }
 
+func GetAllProjects() ([]Project, error) {
+	db, err := Connect()
+	if err != nil {
+		return nil, err
+	}
+
+	defer db.Close()
+	// language=sql
+	selectQuery := fmt.Sprintf("SELECT p.Id AS Id, p.name AS Name, p.key AS Key, p.youtrackserver AS YouTrackServer, p.versionsquery AS VersionsQuery, p.subsystemsQuery AS SubsystemsQuery, p.typesQuery AS TypesQuery, p.key AS Key FROM project p")
+
+	databaseProjects := new([]databaseProject)
+
+	err = db.Select(databaseProjects, selectQuery)
+	if err != nil {
+		return nil, err
+	}
+
+	projects := make([]Project, len(*databaseProjects))
+	for idx, project := range *databaseProjects {
+		projects[idx] = project.ToBindableProject()
+	}
+
+	return projects, err
+}
+
 func GetProject(id string) (*Project, error) {
 	db, err := Connect()
 	if err != nil {
@@ -133,6 +158,20 @@ func GetProject(id string) (*Project, error) {
 	defer db.Close()
 	databaseProject := new(databaseProject)
 	err = db.Get(databaseProject, "SELECT * FROM \"project\" WHERE id = $1", id)
+	project := databaseProject.ToBindableProject()
+
+	return &project, err
+}
+
+func GetProjectByKey(key string) (*Project, error) {
+	db, err := Connect()
+	if err != nil {
+		return nil, err
+	}
+
+	defer db.Close()
+	databaseProject := new(databaseProject)
+	err = db.Get(databaseProject, "SELECT * FROM \"project\" WHERE key = $1", key)
 	project := databaseProject.ToBindableProject()
 
 	return &project, err

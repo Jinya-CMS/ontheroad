@@ -1,0 +1,31 @@
+{{define "content"}}
+    <main class="mx-auto pb-2 bg-white shadow rounded-lg w-2/3 mt-16">
+        <h1 class="mx-4 py-4 text-4xl text-primary-500 underline">Roadmap of {{.CurrentProject.Name}}</h1>
+        {{range .Versions }}
+            <section class="m-4 flex flex-col">
+                <h2 class="text-3xl text-primary-400">{{.Name}}</h2>
+                {{range .Issues}}
+                    <a target="_blank" class="hover:underline text-xl mt-2"
+                       href="{{$.CurrentProject.YouTrackServer}}issue/{{.ID}}">
+                        {{.Summary}}
+                    </a>
+                    {{if .Description}}
+                        <p>{{.Description}}</p>
+                    {{end}}
+                {{else}}
+                    No tasks are planed for this version.
+                {{end}}
+            </section>
+        {{else}}
+            <p>No roadmap found</p>
+        {{end}}
+    </main>
+{{end}}
+
+{{define "submenu"}}
+    <nav class="mr-auto pt-4">
+        {{range .Projects}}
+            <a class="text-primary-500 hover:underline mx-4" href="/roadmap/{{.Key}}">{{.Name}}</a>
+        {{end}}
+    </nav>
+{{end}}

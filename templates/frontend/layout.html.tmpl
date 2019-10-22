@@ -1,0 +1,22 @@
+{{define "layout"}}
+    <html lang="en">
+    <head>
+        <title>On The Road</title>
+        <link rel="stylesheet" href="/public/frontend.css">
+    </head>
+    <body class="bg-gray-100">
+    <div class="mx-auto w-2/3 mt-16 py-4 bg-white shadow">
+        <div class="flex justify-between mx-auto pb-4">
+            <nav class="mr-auto">
+                <a class="text-primary-500 hover:underline mx-4" href="/roadmap">Roadmap</a>
+                <a class="text-primary-500 hover:underline mx-4" href="/tasks">Open Tasks</a>
+            </nav>
+        </div>
+        <div class="flex justify-between mx-auto border-t border-primary-300">
+            {{template "submenu" .}}
+        </div>
+    </div>
+    {{template "content" .}}
+    </body>
+    </html>
+{{end}}

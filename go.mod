@@ -3,6 +3,7 @@ module go.jinya.de/ontheroad
 go 1.12
 
 require (
+	github.com/hashicorp/go-version v1.2.0
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/julienschmidt/httprouter v1.3.0
 	github.com/kr/pretty v0.1.0 // indirect

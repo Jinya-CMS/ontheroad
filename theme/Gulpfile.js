@@ -3,7 +3,7 @@ const gulp = require('gulp');
 gulp.task('default', function () {
     const postcss = require('gulp-postcss');
 
-    return gulp.src('src/admin.css')
+    return gulp.src(['src/admin.css', 'src/frontend.css'])
         .pipe(postcss([
             require('tailwindcss'),
             require('autoprefixer'),

@@ -4,6 +4,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 	"go.jinya.de/ontheroad/admin"
 	"go.jinya.de/ontheroad/api"
+	"go.jinya.de/ontheroad/frontend"
 	"go.jinya.de/ontheroad/setup"
 	"net/http"
 )
@@ -53,6 +54,10 @@ func GetHttpRouter() *httprouter.Router {
 	router.GET("/api/:id/subsystem", api.GetAllSubsystemsAction)
 	router.GET("/api/:id/types", api.GetAllTypesAction)
 	router.GET("/api/:id/issues", api.GetIssuesAction)
+
+	router.GET("/", frontend.RoadmapViewWithoutKey)
+	router.GET("/roadmap", frontend.RoadmapViewWithoutKey)
+	router.GET("/roadmap/:key", frontend.RoadmapView)
 
 	return router
 }

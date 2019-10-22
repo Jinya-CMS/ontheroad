@@ -85,7 +85,7 @@ func (client *Client) GetIssues(versions []string, subsystems []string, types []
 	query = fmt.Sprintf("%s and (%s", query, strings.Join([]string{versionQuery, typeQuery, subsystemQuery}, ") and ("))
 
 	if orderField != "" && orderDirection != "" {
-		query = fmt.Sprintf("%s) and order by:%s %s", query, orderField, orderDirection)
+		query = fmt.Sprintf("%s) and order by:{%s} %s", query, orderField, orderDirection)
 	} else {
 		query = fmt.Sprintf("%s)", query)
 	}
@@ -93,7 +93,7 @@ func (client *Client) GetIssues(versions []string, subsystems []string, types []
 	escapedQuery := url.QueryEscape(query)
 
 	resp, err := http.Get(fmt.Sprintf(
-		"%sapi/issues?query=%s&fields=id,summary,customFields(id,projectCustomField(id,field(id,name)),value(isResolved,localizedName,name,text))",
+		"%sapi/issues?query=%s&fields=idReadable,description,summary,customFields(id,projectCustomField(id,field(id,name)),value(isResolved,localizedName,name,text))",
 		client.Project.YouTrackServer,
 		escapedQuery))
 	if err != nil {
