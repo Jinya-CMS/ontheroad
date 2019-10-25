@@ -5,16 +5,11 @@
         <link rel="stylesheet" href="/public/frontend.css">
     </head>
     <body class="bg-gray-100">
-    <div class="mx-auto w-2/3 mt-16 py-4 bg-white shadow rounded-lg">
-        <div class="flex justify-between mx-auto pb-4">
-            <nav class="mr-auto">
-                <a class="text-primary-500 hover:underline mx-4" href="/roadmap">Roadmap</a>
-                <a class="text-primary-500 hover:underline mx-4" href="/tasks">Open Tasks</a>
-            </nav>
-        </div>
-        <div class="flex justify-between mx-auto border-t border-primary-300">
-            {{template "submenu" .}}
-        </div>
+    <header class="mx-auto mt-4 text-primary-700">
+        <h1 class="text-center text-5xl">{{getConfig "OrgName"}} is On The Road</h1>
+    </header>
+    <div class="mx-auto w-2/3 mt-4 py-4 bg-white shadow rounded-lg flex mx-auto">
+        {{template "menu" .}}
     </div>
     {{template "content" .}}
     </body>

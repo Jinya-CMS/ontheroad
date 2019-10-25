@@ -19,6 +19,9 @@ func GetHttpRouter() *httprouter.Router {
 	router.GET("/setup/admin", setup.CreateAdminView)
 	router.POST("/setup/admin", setup.CreateAdminAction)
 
+	router.GET("/admin", func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+		http.Redirect(w, r, "/admin/project", http.StatusSeeOther)
+	})
 	router.GET("/admin/login", admin.LoginView)
 	router.POST("/admin/login", admin.LoginAction)
 	router.POST("/admin/logout", func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -49,6 +52,15 @@ func GetHttpRouter() *httprouter.Router {
 	router.POST("/admin/project/edit/:id", AuthenticatedMiddleware(admin.EditProjectAction))
 	router.GET("/admin/project/delete/:id", AuthenticatedMiddleware(admin.DeleteProjectView))
 	router.POST("/admin/project/delete/:id", AuthenticatedMiddleware(admin.DeleteProjectAction))
+
+	router.GET("/admin/config", AuthenticatedMiddleware(admin.ListConfig))
+	router.GET("/admin/config/add", AuthenticatedMiddleware(admin.AddConfigView))
+	router.POST("/admin/config/add", AuthenticatedMiddleware(admin.AddConfigAction))
+	router.GET("/admin/config/details/:key", AuthenticatedMiddleware(admin.DetailsConfigView))
+	router.GET("/admin/config/edit/:key", AuthenticatedMiddleware(admin.EditConfigView))
+	router.POST("/admin/config/edit/:key", AuthenticatedMiddleware(admin.EditConfigAction))
+	router.GET("/admin/config/delete/:key", AuthenticatedMiddleware(admin.DeleteConfigView))
+	router.POST("/admin/config/delete/:key", AuthenticatedMiddleware(admin.DeleteConfigAction))
 
 	router.GET("/api/:id/version", api.GetAllVersionsAction)
 	router.GET("/api/:id/subsystem", api.GetAllSubsystemsAction)

@@ -7,6 +7,7 @@ import (
 	"go.jinya.de/ontheroad/youtrack"
 	"net/http"
 	"sort"
+	"time"
 )
 
 func count(issues []youtrack.Issue, predicate func(issue youtrack.Issue) bool) int {
@@ -21,8 +22,10 @@ func count(issues []youtrack.Issue, predicate func(issue youtrack.Issue) bool) i
 }
 
 type templateVersion struct {
-	Name   string
-	Issues []youtrack.Issue
+	Name        string
+	Issues      []youtrack.Issue
+	Released    bool
+	ReleaseDate time.Time
 }
 
 var templateData struct {
@@ -48,7 +51,7 @@ func RoadmapViewWithoutKey(w http.ResponseWriter, r *http.Request, _ httprouter.
 	}})
 }
 
-func RoadmapView(w http.ResponseWriter, _ *http.Request, params httprouter.Params) {
+func RoadmapView(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	templateData.HasError = false
 	projectKey := params.ByName("key")
 	projects, err := database.GetAllProjects()
@@ -83,7 +86,7 @@ func RoadmapView(w http.ResponseWriter, _ *http.Request, params httprouter.Param
 		return
 	}
 
-	issues, err := client.GetIssues([]string{}, []string{}, []string{}, "Fix Versions", "DESC")
+	issues, err := client.GetIssues([]string{}, []string{}, []string{"Feature", "Improvement"}, "Fix Versions", "DESC")
 	if err != nil {
 		templateData.Error = err.Error()
 		templateData.HasError = true
@@ -111,12 +114,14 @@ func RoadmapView(w http.ResponseWriter, _ *http.Request, params httprouter.Param
 		}
 
 		templateVersions[vIdx] = templateVersion{
-			Name:   version.Name,
-			Issues: issueList,
+			Name:        version.Name,
+			Released:    version.Released,
+			ReleaseDate: version.ReleaseDate,
+			Issues:      issueList,
 		}
 	}
 
 	templateData.Versions = templateVersions
 	templateData.HasError = false
-	httputils.RenderFrontend("templates/frontend/roadmap/index.html.tmpl", templateData, w)
+	httputils.RenderFrontend("templates/frontend/roadmap/index.html.tmpl", templateData, r, w)
 }

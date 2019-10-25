@@ -20,6 +20,8 @@ var Migrations = []Migration{
 	new(Migration20191009T215919766Z),
 	new(Migration20191010T200519766Z),
 	new(Migration20191012T003719766Z),
+	new(Migration20191012T203219766Z),
+	new(Migration20191025T234219766Z),
 }
 
 func createMigrationsTable() error {

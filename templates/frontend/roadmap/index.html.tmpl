@@ -2,18 +2,28 @@
     <main class="mx-auto pb-2 bg-white shadow rounded-lg w-2/3 mt-16">
         <h1 class="mx-4 py-4 text-4xl text-primary-500 underline">Roadmap of {{.CurrentProject.Name}}</h1>
         {{range .Versions }}
+            {{$released := .Released}}
             <section class="m-4 flex flex-col">
-                <h2 class="text-3xl text-primary-400">{{.Name}}</h2>
+                <header class="">
+                    <h2 class="text-primary-400">
+                        <span class="text-3xl">{{.Name}}</span>
+                        {{if .Released}}
+                            <span class="text-l text-primary-900">Release Date: {{formatDate .ReleaseDate}}</span>
+                        {{end}}
+                    </h2>
+                </header>
                 {{range .Issues}}
-                    <a target="_blank" class="hover:underline text-xl mt-2"
-                       href="{{$.CurrentProject.YouTrackServer}}issue/{{.ID}}">
-                        {{.Summary}}
-                    </a>
+                    <div class="mt-2">
+                        <a target="_blank" class="hover:underline text-xl"
+                           href="{{$.CurrentProject.YouTrackServer}}issue/{{.ID}}">
+                            {{.Summary}}
+                        </a>
+                    </div>
                     {{if .Description}}
-                        <p>{{.Description}}</p>
+                        <div class="markdown">{{markdown .Description}}</div>
                     {{end}}
                 {{else}}
-                    No tasks are planed for this version.
+                    No new features {{if $released}}were{{else}}are{{end}} planed for this version.
                 {{end}}
             </section>
         {{else}}
@@ -22,10 +32,9 @@
     </main>
 {{end}}
 
-{{define "submenu"}}
-    <nav class="mr-auto pt-4">
-        {{range .Projects}}
-            <a class="text-primary-500 hover:underline mx-4" href="/roadmap/{{.Key}}">{{.Name}}</a>
-        {{end}}
-    </nav>
+{{define "menu"}}
+    {{range .Projects}}
+        <a class="{{if urlEndsWith .Key}}text-primary-700 font-bold{{else}}text-primary-500{{end}} hover:underline mx-4"
+           href="/roadmap/{{.Key}}">{{.Name}}</a>
+    {{end}}
 {{end}}
