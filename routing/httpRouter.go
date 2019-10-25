@@ -56,7 +56,6 @@ func GetHttpRouter() *httprouter.Router {
 	router.GET("/admin/config", AuthenticatedMiddleware(admin.ListConfig))
 	router.GET("/admin/config/add", AuthenticatedMiddleware(admin.AddConfigView))
 	router.POST("/admin/config/add", AuthenticatedMiddleware(admin.AddConfigAction))
-	router.GET("/admin/config/details/:key", AuthenticatedMiddleware(admin.DetailsConfigView))
 	router.GET("/admin/config/edit/:key", AuthenticatedMiddleware(admin.EditConfigView))
 	router.POST("/admin/config/edit/:key", AuthenticatedMiddleware(admin.EditConfigAction))
 	router.GET("/admin/config/delete/:key", AuthenticatedMiddleware(admin.DeleteConfigView))

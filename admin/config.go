@@ -7,12 +7,65 @@ import (
 	"go.jinya.de/ontheroad/database"
 	httpUtils "go.jinya.de/ontheroad/utils/http"
 	"net/http"
+	"os"
+	"os/exec"
+	"text/template"
 )
 
 type configActionTmplData struct {
 	Error    string
 	Config   *database.Configuration
 	HasError bool
+}
+
+func processPostcssConfig() {
+	tmpl, err := template.ParseFiles("templates/theme/tailwind.frontend.config.jstmpl")
+	if err != nil {
+		return
+	}
+
+	primaryColor, err := database.GetConfiguration("PrimaryColor")
+	if err != nil {
+		primaryColor = &database.Configuration{
+			Id:    "",
+			Key:   "",
+			Value: "#da9c8a",
+		}
+	}
+
+	secondaryColor, err := database.GetConfiguration("SecondaryColor")
+	if err != nil {
+		secondaryColor = &database.Configuration{
+			Id:    "",
+			Key:   "",
+			Value: "#8ac8da",
+		}
+	}
+
+	grayColor, err := database.GetConfiguration("GrayColor")
+	if err != nil {
+		grayColor = &database.Configuration{
+			Id:    "",
+			Key:   "",
+			Value: "#adb5bd",
+		}
+	}
+
+	data := map[string]string{
+		"PrimaryColor":   primaryColor.Value,
+		"SecondaryColor": secondaryColor.Value,
+		"GrayColor":      grayColor.Value,
+	}
+
+	targetFile, err := os.OpenFile("theme/tailwind.frontend.config.js", os.O_RDWR|os.O_CREATE, 0755)
+	err = tmpl.Execute(targetFile, data)
+	if err != nil {
+		return
+	}
+
+	cmd := exec.Command("yarn", "gulp")
+	cmd.Dir = "theme/"
+	_ = cmd.Run()
 }
 
 func ListConfig(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -88,36 +141,8 @@ func AddConfigAction(w http.ResponseWriter, r *http.Request, _ httprouter.Params
 		return
 	}
 
+	processPostcssConfig()
 	http.Redirect(w, r, "/admin/config", http.StatusSeeOther)
-}
-
-func DetailsConfigView(w http.ResponseWriter, _ *http.Request, params httprouter.Params) {
-	config, err := database.GetConfiguration(params.ByName("key"))
-	var tmplData configActionTmplData
-	if err != nil {
-		if pgErr, ok := err.(*pq.Error); ok {
-			tmplData = configActionTmplData{
-				Error:    pgErr.Detail,
-				HasError: true,
-				Config:   config,
-			}
-		} else {
-			tmplData = configActionTmplData{
-				Error:    err.Error(),
-				HasError: true,
-				Config:   config,
-			}
-		}
-
-		httpUtils.RenderAdmin("templates/admin/config/details.html.tmpl", tmplData, w)
-		return
-	}
-
-	httpUtils.RenderAdmin("templates/admin/config/details.html.tmpl", configActionTmplData{
-		Error:    "",
-		Config:   config,
-		HasError: false,
-	}, w)
 }
 
 func EditConfigView(w http.ResponseWriter, _ *http.Request, params httprouter.Params) {
@@ -210,6 +235,7 @@ func EditConfigAction(w http.ResponseWriter, r *http.Request, params httprouter.
 		return
 	}
 
+	processPostcssConfig()
 	http.Redirect(w, r, "/admin/config", http.StatusSeeOther)
 }
 
@@ -265,5 +291,6 @@ func DeleteConfigAction(w http.ResponseWriter, r *http.Request, params httproute
 		return
 	}
 
+	processPostcssConfig()
 	http.Redirect(w, r, "/admin/config", http.StatusSeeOther)
 }

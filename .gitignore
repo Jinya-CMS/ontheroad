@@ -14,3 +14,4 @@
 *.lock
 !yarn.lock
 node_modules
+go_build_go_jinya_de_ontheroad
