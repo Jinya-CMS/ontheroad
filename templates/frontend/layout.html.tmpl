@@ -1,0 +1,17 @@
+{{define "layout"}}
+    <html lang="en">
+    <head>
+        <title>On The Road</title>
+        <link rel="stylesheet" href="/public/frontend.css">
+    </head>
+    <body class="bg-gray-100">
+    <header class="mx-auto mt-4 text-primary-700">
+        <h1 class="text-center text-5xl">{{getConfig "OrgName"}} is On The Road</h1>
+    </header>
+    <div class="mx-auto w-2/3 mt-4 py-4 bg-white shadow rounded-lg flex mx-auto">
+        {{template "menu" .}}
+    </div>
+    {{template "content" .}}
+    </body>
+    </html>
+{{end}}

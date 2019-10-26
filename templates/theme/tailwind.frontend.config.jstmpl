@@ -1,0 +1,38 @@
+const polished = require('polished');
+
+module.exports = {
+    theme: {
+        extend: {
+            colors: {
+                'primary-100': polished.lighten(0.4, '{{.PrimaryColor}}'),
+                'primary-200': polished.lighten(0.3, '{{.PrimaryColor}}'),
+                'primary-300': polished.lighten(0.2, '{{.PrimaryColor}}'),
+                'primary-400': polished.lighten(0.1, '{{.PrimaryColor}}'),
+                'primary-500': '{{.PrimaryColor}}',
+                'primary-600': polished.darken(0.1, '{{.PrimaryColor}}'),
+                'primary-700': polished.darken(0.2, '{{.PrimaryColor}}'),
+                'primary-800': polished.darken(0.3, '{{.PrimaryColor}}'),
+                'primary-900': polished.darken(0.4, '{{.PrimaryColor}}'),
+                'secondary-100': polished.lighten(0.4, '{{.SecondaryColor}}'),
+                'secondary-200': polished.lighten(0.3, '{{.SecondaryColor}}'),
+                'secondary-300': polished.lighten(0.2, '{{.SecondaryColor}}'),
+                'secondary-400': polished.lighten(0.1, '{{.SecondaryColor}}'),
+                'secondary-500': '{{.SecondaryColor}}',
+                'secondary-600': polished.darken(0.1, '{{.SecondaryColor}}'),
+                'secondary-700': polished.darken(0.2, '{{.SecondaryColor}}'),
+                'secondary-800': polished.darken(0.3, '{{.SecondaryColor}}'),
+                'secondary-900': polished.darken(0.4, '{{.SecondaryColor}}'),
+                'gray-100': polished.lighten(0.4, '{{.GrayColor}}'),
+                'gray-200': polished.lighten(0.3, '{{.GrayColor}}'),
+                'gray-300': polished.lighten(0.2, '{{.GrayColor}}'),
+                'gray-400': polished.lighten(0.1, '{{.GrayColor}}'),
+                'gray-500': '{{.GrayColor}}',
+                'gray-600': polished.darken(0.1, '{{.GrayColor}}'),
+                'gray-700': polished.darken(0.2, '{{.GrayColor}}'),
+                'gray-800': polished.darken(0.3, '{{.GrayColor}}'),
+                'gray-900': polished.darken(0.4, '{{.GrayColor}}'),
+            }
+        }
+    },
+    plugins: [],
+};

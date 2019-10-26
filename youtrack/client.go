@@ -10,6 +10,7 @@ import (
 	"net/url"
 	"sort"
 	"strings"
+	"time"
 )
 
 type Client struct {
@@ -48,8 +49,41 @@ func getEnumBundle(server string, query string) ([]EnumType, error) {
 	return items, nil
 }
 
-func (client *Client) GetVersions() ([]EnumType, error) {
-	return getEnumBundle(client.Project.YouTrackServer, client.Project.VersionsQuery)
+func (client *Client) GetVersions() ([]VersionType, error) {
+	reqUrl := fmt.Sprintf("%s%s?fields=%s", client.Project.YouTrackServer, client.Project.VersionsQuery, url.QueryEscape("values(id,description,ordinal,name,released,releaseDate)"))
+	resp, err := http.Get(reqUrl)
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, errors.New("not found")
+	}
+
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var versionBundle versionBundle
+	err = json.Unmarshal(body, &versionBundle)
+	if err != nil {
+		return nil, err
+	}
+
+	items := make([]VersionType, len(versionBundle.Values))
+	for idx, item := range versionBundle.Values {
+		items[idx] = item
+		items[idx].ReleaseDate = time.Unix(item.ReleaseDateNumeric/1000, 0)
+	}
+
+	sort.Slice(items, func(i, j int) bool {
+		return items[i].Ordinal < items[j].Ordinal
+	})
+
+	return items, nil
 }
 
 func (client *Client) GetSubsystems() ([]EnumType, error) {
@@ -85,7 +119,7 @@ func (client *Client) GetIssues(versions []string, subsystems []string, types []
 	query = fmt.Sprintf("%s and (%s", query, strings.Join([]string{versionQuery, typeQuery, subsystemQuery}, ") and ("))
 
 	if orderField != "" && orderDirection != "" {
-		query = fmt.Sprintf("%s) and order by:%s %s", query, orderField, orderDirection)
+		query = fmt.Sprintf("%s) and order by:{%s} %s", query, orderField, orderDirection)
 	} else {
 		query = fmt.Sprintf("%s)", query)
 	}
@@ -93,7 +127,7 @@ func (client *Client) GetIssues(versions []string, subsystems []string, types []
 	escapedQuery := url.QueryEscape(query)
 
 	resp, err := http.Get(fmt.Sprintf(
-		"%sapi/issues?query=%s&fields=id,summary,customFields(id,projectCustomField(id,field(id,name)),value(isResolved,localizedName,name,text))",
+		"%sapi/issues?query=%s&fields=idReadable,description,summary,customFields(id,projectCustomField(id,field(id,name)),value(isResolved,localizedName,name,text))",
 		client.Project.YouTrackServer,
 		escapedQuery))
 	if err != nil {

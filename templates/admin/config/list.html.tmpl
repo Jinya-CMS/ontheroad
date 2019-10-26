@@ -1,0 +1,39 @@
+{{define "content"}}
+    <div class="mx-auto container mt-16 rounded-lg shadow py-4 px-8 bg-white">
+        <header class="border-primary-200 border-b border-solid pb-8">
+            <h1 class="text-4xl text-gray-700 w-auto">Configurations</h1>
+        </header>
+        <form method="get" class="flex justify-end mt-2 items-baseline">
+            <a href="/admin/config/add"
+               class="py-1 px-2 rounded-lg bg-primary-500 text-white hover:bg-white hover:text-primary-500 border-2 border-solid border-primary-500 ml-auto">
+                Add Configuration
+            </a>
+        </form>
+        <table class="border-collapse w-full text-base text-gray-700 mt-8 table-auto">
+            <thead class="text-left">
+            <tr class="border-b-2 border-primary-900">
+                <th class="p-2">Key</th>
+                <th class="p-2">Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{range .Configs}}
+                <tr class="odd:bg-gray-100">
+                    <td class="p-2">
+                        <a class="text-primary-700 hover:underline" href="/admin/config/edit/{{.Key}}">{{.Key}}</a>
+                    </td>
+                    <td class="p-2">
+                        <div class="flex">
+                            {{.Value}}
+                            <a href="/admin/config/delete/{{.Key}}"
+                               class="p-1 rounded-lg bg-red-500 text-white hover:bg-white hover:text-red-500 text-sm border-2 border-solid border-red-500 ml-auto">
+                                Delete Configuration
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {{end}}
+            </tbody>
+        </table>
+    </div>
+{{end}}

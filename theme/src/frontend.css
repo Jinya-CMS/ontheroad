@@ -1,0 +1,20 @@
+* {
+    transition: all 0.3s;
+}
+
+.markdown ul {
+    list-style: disc;
+    padding-left: 2em;
+}
+
+.markdown a {
+    @apply text-primary-500;
+}
+
+.markdown a:hover {
+    @apply underline;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

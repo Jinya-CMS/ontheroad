@@ -4,6 +4,7 @@
     "gulp": "4.0.2",
     "gulp-cli": "2.2.0",
     "gulp-postcss": "8.0.0",
+    "polished": "^3.4.1",
     "tailwindcss": "1.1.2"
   }
 }
