@@ -1,5 +1,4 @@
 const polished = require('polished');
-const defaultConfig = require('tailwindcss/defaultConfig');
 
 module.exports = {
     theme: {
