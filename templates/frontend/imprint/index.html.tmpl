@@ -1,0 +1,12 @@
+{{define "content"}}
+    <main class="mx-auto pb-2 bg-white shadow rounded-lg w-2/3 mt-16">
+        <div class="markdown px-8">{{markdown .Imprint}}</div>
+    </main>
+{{end}}
+
+{{define "menu"}}
+    {{range .Projects}}
+        <a class="{{if urlEndsWith .Key}}text-primary-700 font-bold{{else}}text-primary-500{{end}} hover:underline mx-4"
+           href="/roadmap/{{.Key}}">{{.Name}}</a>
+    {{end}}
+{{end}}

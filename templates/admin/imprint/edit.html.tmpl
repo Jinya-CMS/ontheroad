@@ -1,0 +1,23 @@
+{{define "content"}}
+    <form class="mx-auto container w-1/4 mt-16 rounded-lg shadow py-4 px-8 bg-white" method="post">
+        <header class="border-primary-200 border-b border-solid pb-8">
+            <h1 class="text-4xl text-gray-700">Edit Imprint</h1>
+        </header>
+        <section class="text-base text-gray-700 py-8">
+            {{if .HasError}}
+                <p class="mb-4 px-6 bg-red-700 text-red-100 py-4 rounded-lg">{{.Error}}</p>
+            {{end}}
+            <input type="hidden" name="key" value="imprint">
+            <div class="flex flex-wrap mb-4">
+                <label for="value" class="w-full font-bold">Imprint as Markdown</label>
+                <textarea required name="value" id="value" type="text"
+                          class="py-1 px-2 border border-solid border-primary-500 rounded w-full invalid:border-red-700">{{.Imprint}}</textarea>
+            </div>
+        </section>
+        <footer class="flex border-primary-200 border-t border-solid pt-8 justify-end">
+            <button class="py-1 px-2 rounded-lg bg-primary-500 text-white hover:bg-white hover:text-primary-500 border-2 border-solid border-primary-500 font-normal">
+                Update Imprint
+            </button>
+        </footer>
+    </form>
+{{end}}

@@ -61,6 +61,9 @@ func GetHttpRouter() *httprouter.Router {
 	router.GET("/admin/config/delete/:key", AuthenticatedMiddleware(admin.DeleteConfigView))
 	router.POST("/admin/config/delete/:key", AuthenticatedMiddleware(admin.DeleteConfigAction))
 
+	router.GET("/admin/imprint", AuthenticatedMiddleware(admin.EditImprintView))
+	router.POST("/admin/imprint", AuthenticatedMiddleware(admin.EditImprintAction))
+
 	router.GET("/api/:id/version", api.GetAllVersionsAction)
 	router.GET("/api/:id/subsystem", api.GetAllSubsystemsAction)
 	router.GET("/api/:id/types", api.GetAllTypesAction)
@@ -69,6 +72,7 @@ func GetHttpRouter() *httprouter.Router {
 	router.GET("/", frontend.RoadmapViewWithoutKey)
 	router.GET("/roadmap", frontend.RoadmapViewWithoutKey)
 	router.GET("/roadmap/:key", frontend.RoadmapView)
+	router.GET("/imprint", frontend.Imprint)
 
 	return router
 }
