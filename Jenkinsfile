@@ -32,7 +32,7 @@ spec:
                 sh "apt-get install -y apt-utils"
                 sh "apt-get install -y openjdk-11-jre-headless libzip-dev git wget unzip"
                 sh 'java -version'
-                sh 'go build shopware-tools'
+                sh 'go build go.jinya.de/ontheroad'
                 sh 'wget -U "scannercli" -q -O /opt/sonar-scanner-cli.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.5.0.2216.zip'
                 sh "cd /opt && unzip sonar-scanner-cli.zip"
                 sh "export SONAR_HOME=/opt/sonar-scanner-4.5.0.2216"
